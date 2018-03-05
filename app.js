@@ -15,7 +15,6 @@ var timer = document.querySelector('.time span');
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
-  counterLives = 3;
   displayFlag();
   runGame();
 });
@@ -23,17 +22,26 @@ buttonHome.addEventListener('click', function() {
 buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
-  for (var i = 0; i < lives.length; i++) {
+  initGame();
+  for (let i = 0; i < lives.length; i++) {
     lives[i].classList.toggle('is-active');
   }
 });
+
+function initGame() {
+  answer = {};
+  counterLives = 3;
+  counterScore = 0;
+  counterTimer = 20;
+  lives.className = '';
+}
 
 function displayFlag() {
     answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
     answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
 
     // Boucle qui ajoute les 4 drapeaux (choix de réponses)
-    for (var i = 0; i < answers.length; i++) {
+    for (let i = 0; i < answers.length; i++) {
       var value = flags[Math.floor(Math.random()*flags.length+1)];
       answers[i].src = "flags/" + value.code + ".svg";
     }
@@ -42,8 +50,21 @@ function displayFlag() {
     answers[randomAnswer].src = "flags/" + answer.code + ".svg";
 }
 
+function compareArray() {
+  if (answer.color.length != value.color.length) {
+    console.log(this.color);
+  } /*else {
+    for (var a = 0; a < a1.length; ++a) {
+      if (a1[a] != a2[a]) {
+        return false;
+      }
+    }
+  }*/
+  return true;
+}
+
 function runGame() {
-    for (var i = 0; i < answers.length; i++) {
+    for (let i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
         var verifyAnswer = this.src[49] + this.src[50];
         if (verifyAnswer === answer.code) {
