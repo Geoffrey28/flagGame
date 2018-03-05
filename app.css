@@ -114,6 +114,7 @@ h2 {
     max-width: 400px;
     margin: auto;
     padding: 0 10px;
+    cursor: pointer;
 }
 
 .flag {
