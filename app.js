@@ -7,16 +7,17 @@ var answerName = document.getElementById('countriesName');
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
-  addFlag();
+  displayFlag();
+  runGame();
 });
 
-function addFlag() {
-    var answer = flags[Math.floor(Math.random()*103)]; // Choisi un pays au hasard dans la liste
-    answerName.textContent = answer.name; // Fais apparaître le nom du pays à trouver
+function displayFlag() {
+    var answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
+    answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
 
     // Boucle qui ajoute les 4 drapeaux (choix de réponses)
     for (var i = 0; i < answers.length; i++) {
-      var value = flags[Math.floor(Math.random()*103)];
+      var value = flags[Math.floor(Math.random()*flags.length)];
       answers[i].src = "flags/" + value.code + ".svg";
       console.log(answers[i]);
     }
@@ -25,12 +26,19 @@ function addFlag() {
     answers[randomAnswer].src = "flags/" + answer.code + ".svg";
 }
 
-
-function selectAnswer() {
-  
+function runGame() {
+    for (var i = 0; i < answers.length; i++) {
+      answers[i].addEventListener('click', function() {
+        var verifyAnswer = this.src[49] + this.src[50];
+        if (verifyAnswer === answer.code) {
+          console.log('win');
+        } else {
+          console.log('lose');
+        }
+      });
+    }
 }
 
-selectAnswer();
 
 
 
