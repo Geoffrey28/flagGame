@@ -32,7 +32,7 @@ buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
   for (let i = 0; i < lives.length; i++) {
-    lives[i].classList.toggle('is-active');
+    lives[i].classList.remove('is-active');
   }
 });
 
@@ -47,6 +47,12 @@ function displayFlag() {
       var value = flags[Math.floor(Math.random()*flags.length+1)];
       answers[i].src = "flags/" + value.code + ".svg";
     }
+
+    for (var i = 0; i < answers.length; i++) {
+      var value = flags[Math.floor(Math.random()*flags.length+1)];
+      answers[i]
+    }
+
     // Ajoute le pays à trouver parmi les 4 propositions
     var randomAnswer = [Math.floor(Math.random()*4)];
     answers[randomAnswer].src = "flags/" + answer.code + ".svg";
@@ -100,10 +106,11 @@ function clock()  {
      if(counterTimer > 0) {
         timer.textContent = counterTimer;
         counterTimer--;
-     } else {
-        clearInterval(intervalId);
-        game.classList.toggle('is-open');
-        gameOver.classList.toggle('is-open');
+     } else if (counterTimer == 0) {
+        //clearInterval(intervalId)
+        game.classList.remove('is-open');
+        gameOver.classList.add('is-open');
+        counterTimer--;
      }
 };
 
