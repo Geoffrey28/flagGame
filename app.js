@@ -15,6 +15,7 @@ var timer = document.querySelector('.time span');
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
+  initGame();
   displayFlag();
   runGame();
 });
@@ -22,7 +23,6 @@ buttonHome.addEventListener('click', function() {
 buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
-  initGame();
   for (let i = 0; i < lives.length; i++) {
     lives[i].classList.toggle('is-active');
   }
@@ -86,6 +86,7 @@ function removeLives() {
   counterLives--;
   lives[counterLives].classList.toggle('is-active');
   if (counterLives == 0) {
+    answers.removeEventListener;
     game.classList.toggle('is-open');
     gameOver.classList.toggle('is-open');
   }
