@@ -11,15 +11,18 @@ var counterLives = 3;
 var score = document.querySelector('.score strong');
 var counterScore = 0;
 var timer = document.querySelector('.time span');
+var counterTimer = 20;
+var intervalId = null;
 
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
   answer = {};
   counterLives = 3;
-  counterTimer = 20;
   counterScore = -1;
+  counterTimer = 20;
   lives.className = '';
+  setClock();
   displayFlag();
   runGame();
   addScore();
@@ -40,7 +43,7 @@ function displayFlag() {
     answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
 
     // Boucle qui ajoute les 4 drapeaux (choix de réponses)
-    for (let i = 0; i < answers.length; i++) {
+    for (var i = 0; i < answers.length; i++) {
       var value = flags[Math.floor(Math.random()*flags.length+1)];
       answers[i].src = "flags/" + value.code + ".svg";
     }
@@ -69,6 +72,9 @@ function runGame() {
         if (verify === answer.code) {
           addScore();
           displayFlag();
+          if (counterTimer < 30) {
+            counterTimer = counterTimer + 4;
+          }
         } else {
           removeLives();
         }
@@ -90,7 +96,20 @@ function removeLives() {
   }
 }
 
+function clock()  {
+     if(counterTimer > 0) {
+        timer.textContent = counterTimer;
+        counterTimer--;
+     } else {
+        clearInterval(intervalId);
+        game.classList.toggle('is-open');
+        gameOver.classList.toggle('is-open');
+     }
+};
 
+function setClock(){
+     intervalId = setInterval(clock, 1000);
+};
 
 
 
