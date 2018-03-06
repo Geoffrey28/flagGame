@@ -15,9 +15,14 @@ var timer = document.querySelector('.time span');
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
-  initGame();
+  answer = {};
+  counterLives = 3;
+  counterTimer = 20;
+  counterScore = -1;
+  lives.className = '';
   displayFlag();
   runGame();
+  addScore();
 });
 
 buttonGameOver.addEventListener('click', function(){
@@ -28,13 +33,7 @@ buttonGameOver.addEventListener('click', function(){
   }
 });
 
-function initGame() {
-  answer = {};
-  counterLives = 3;
-  counterScore = 0;
-  counterTimer = 20;
-  lives.className = '';
-}
+
 
 function displayFlag() {
     answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
@@ -66,10 +65,10 @@ function compareArray() {
 function runGame() {
     for (let i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
-        var verifyAnswer = this.src[49] + this.src[50];
-        if (verifyAnswer === answer.code) {
-          displayFlag();
+        var verify = this.src[49] + this.src[50];
+        if (verify === answer.code) {
           addScore();
+          displayFlag();
         } else {
           removeLives();
         }
@@ -86,7 +85,6 @@ function removeLives() {
   counterLives--;
   lives[counterLives].classList.toggle('is-active');
   if (counterLives == 0) {
-    answers.removeEventListener;
     game.classList.toggle('is-open');
     gameOver.classList.toggle('is-open');
   }
