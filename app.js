@@ -1,5 +1,5 @@
 var home = document.getElementById('game-start');
-var flagFinder = document.getElementById('flagFinder');
+var game = document.getElementById('game');
 var gameOver = document.getElementById('game-over');
 var buttonHome = document.querySelector('#game-start button');
 var buttonGameOver = document.querySelector('#game-over button');
@@ -11,29 +11,44 @@ var score = document.querySelector('.score strong');
 var timer = document.querySelector('.time span');
 var counterTimer = 20;
 
-window.onload = runGame(); setClock();
+
+/*
+var prenoms = ['ariel', 'thomas', 'vincent']
+var filtered = prenoms.filter(function(obj){
+  return obj.indexOf('a') > -1
+});
+console.log(filtered);
+*/
+
+
+
+
+window.addEventListener('load', function() {
+  runGame();
+  setClock();
+})
 
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
-  flagFinder.classList.toggle('is-open');
+  game.classList.toggle('is-open');
   answer = {};
   counterLives = 3;
   counterScore = -1;
   counterTimer = 20;
   lives.className = '';
-  displayFlagFinder();
+  displaygame();
   addScore();
 });
 
 buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
-  for (let i = 0; i < lives.length; i++) {
+  for (var i = 0; i < lives.length; i++) {
     lives[i].classList.remove('is-active');
   }
 });
 
-function displayFlagFinder() {
+function displaygame() {
 
     answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
     answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
@@ -47,31 +62,19 @@ function displayFlagFinder() {
       } while (value.name === answer.name);
       answers[i].src = "flags/" + value.code + ".svg";
     }
-    
+
     // Ajoute le pays à trouver parmi les 4 propositions
     var randomAnswer = [Math.floor(Math.random()*4)];
     answers[randomAnswer].src = "flags/" + answer.code + ".svg";
 }
 
-
-
-    // TRI COULEURS
-/*    for (var i = 0; i < answer.colors; i++) {
-      for (var a = 0; a < value.colors; a++) {
-        do {
-          var value = flags[Math.floor(Math.random()*flags.length+1)];
-        } while (answer[i].colors != value[i].colors || value.code == answer.code);
-      }
-    }
-    answers[i].src = "flags/" + value.code + ".svg"; */
-
 function runGame() {
-    for (let i = 0; i < answers.length; i++) {
+    for (var i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
         var verify = this.src[49] + this.src[50];
         if (verify === answer.code) {
           addScore();
-          displayFlagFinder();
+          displaygame();
           if (counterTimer < 30) {
             counterTimer = counterTimer + 4;
           }
@@ -92,7 +95,7 @@ function removeLives() {
   counterLives--;
   lives[counterLives].classList.toggle('is-active');
   if (counterLives == 0) {
-    flagFinder.classList.toggle('is-open');
+    game.classList.toggle('is-open');
     gameOver.classList.toggle('is-open');
   }
 }
@@ -102,7 +105,7 @@ function clock()  {
         timer.textContent = counterTimer;
         counterTimer--;
      } else if (counterTimer == 0) {
-        flagFinder.classList.remove('is-open');
+        game.classList.remove('is-open');
         gameOver.classList.add('is-open');
         counterTimer--;
      }
