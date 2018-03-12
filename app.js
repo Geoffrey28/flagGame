@@ -33,11 +33,9 @@ buttonHome.addEventListener('click', function() {
   game.classList.toggle('is-open');
   answer = {};
   counterLives = 3;
-  counterScore = -1;
+  counterScore = 0;
   counterTimer = 20;
   lives.className = '';
-  displaygame();
-  addScore();
 });
 
 buttonGameOver.addEventListener('click', function(){
@@ -48,32 +46,35 @@ buttonGameOver.addEventListener('click', function(){
   }
 });
 
-function displaygame() {
+function displayAnswerName() {
+  answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
+  countriesName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
+}
 
-    answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
-    answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
+function displayAnswerFlag() {
+  var randomAnswer = [Math.floor(Math.random()*4)];
+  answers[randomAnswer].src = "flags/" + answer.code + ".svg";
+}
 
-
-    // Boucle qui ajoute les 4 drapeaux (choix de réponses)
-    for (var i = 0; i < answers.length; i++) {
-      var value = flags[Math.floor(Math.random()*flags.length+1)];
-      do {
-        var value = flags[Math.floor(Math.random()*flags.length+1)];
-      } while (value.name === answer.name);
+function displayRandomFlag() {
+  // Boucle qui ajoute les 4 drapeaux (choix de réponses)
+  for (var i = 0; i < answers.length; i++) {
+    var value = flags[Math.floor(Math.random()*flags.length-1)];
+    if (answers[i].src.length === 0) {
       answers[i].src = "flags/" + value.code + ".svg";
     }
-
-    // Ajoute le pays à trouver parmi les 4 propositions
-    var randomAnswer = [Math.floor(Math.random()*4)];
-    answers[randomAnswer].src = "flags/" + answer.code + ".svg";
+  }
 }
 
 function runGame() {
+    displayAnswerName();
+    displayAnswerFlag();
+    displayRandomFlag();
     for (var i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
         var verify = this.src[49] + this.src[50];
         if (verify === answer.code) {
-          addScore();
+          counterScore++;
           displaygame();
           if (counterTimer < 30) {
             counterTimer = counterTimer + 4;
@@ -86,11 +87,6 @@ function runGame() {
     }
 }
 
-function addScore() {
-  counterScore++;
-  score.textContent = counterScore;
-}
-
 function removeLives() {
   counterLives--;
   lives[counterLives].classList.toggle('is-active');
@@ -100,8 +96,9 @@ function removeLives() {
   }
 }
 
-function clock()  {
+function clock(counterScore)  {
      if(counterTimer > 0) {
+        score.textContent = counterScore;
         timer.textContent = counterTimer;
         counterTimer--;
      } else if (counterTimer == 0) {
