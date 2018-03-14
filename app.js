@@ -11,80 +11,83 @@ var score = document.querySelector('.score strong');
 var timer = document.querySelector('.time span');
 var counterTimer = 20;
 
-
-/*
-var prenoms = ['ariel', 'thomas', 'vincent']
-var filtered = prenoms.filter(function(obj){
-  return obj.indexOf('a') > -1
-});
-console.log(filtered);
-*/
-
-
-
-
-window.addEventListener('load', function() {
-  runGame();
-  setClock();
-})
+window.onload = runGame(); setClock();
 
 buttonHome.addEventListener('click', function() {
   home.classList.toggle('is-open');
   game.classList.toggle('is-open');
   answer = {};
   counterLives = 3;
-  counterScore = 0;
+  counterScore = -1;
   counterTimer = 20;
   lives.className = '';
+  displaygame();
+  addScore();
 });
 
 buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
-  for (var i = 0; i < lives.length; i++) {
+  for (let i = 0; i < lives.length; i++) {
     lives[i].classList.remove('is-active');
   }
 });
 
-function displayAnswerName() {
-  answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
-  countriesName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
-}
+function displaygame() {
 
-function displayAnswerFlag() {
-  var randomAnswer = [Math.floor(Math.random()*4)];
-  answers[randomAnswer].src = "flags/" + answer.code + ".svg";
-}
+    answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
+    answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
 
-function displayRandomFlag() {
-  // Boucle qui ajoute les 4 drapeaux (choix de réponses)
-  for (var i = 0; i < answers.length; i++) {
-    var value = flags[Math.floor(Math.random()*flags.length-1)];
-    if (answers[i].src.length === 0) {
+
+    // Boucle qui ajoute les 4 drapeaux (choix de réponses)
+    for (var i = 0; i < answers.length; i++) {
+      var value = flags[Math.floor(Math.random()*flags.length+1)];
+      do {
+        var value = flags[Math.floor(Math.random()*flags.length+1)];
+      } while (value.name === answer.name);
       answers[i].src = "flags/" + value.code + ".svg";
     }
-  }
+
+    // Ajoute le pays à trouver parmi les 4 propositions
+    var randomAnswer = [Math.floor(Math.random()*4)];
+    answers[randomAnswer].src = "flags/" + answer.code + ".svg";
 }
 
+
+
+    // TRI COULEURS
+/*    for (var i = 0; i < answer.colors; i++) {
+      for (var a = 0; a < value.colors; a++) {
+        do {
+          var value = flags[Math.floor(Math.random()*flags.length+1)];
+        } while (answer[i].colors != value[i].colors || value.code == answer.code);
+      }
+    }
+    answers[i].src = "flags/" + value.code + ".svg"; */
+
 function runGame() {
-    displayAnswerName();
-    displayAnswerFlag();
-    displayRandomFlag();
     for (var i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
-        var verify = this.src[49] + this.src[50];
+        var verify = this.src[46] + this.src[47];
+        console.log(this.src);
+        console.log(verify);
         if (verify === answer.code) {
-          counterScore++;
+          addScore();
           displaygame();
           if (counterTimer < 30) {
             counterTimer = counterTimer + 4;
           }
-        } else if (answers[i].className != 'is-active') {
-          answers[i].classList.add('is-active');
+        } else if (this.className != 'is-active') {
+          this.classList.add('is-active');
           removeLives();
         }
       });
     }
+}
+
+function addScore() {
+  counterScore++;
+  score.textContent = counterScore;
 }
 
 function removeLives() {
@@ -96,9 +99,8 @@ function removeLives() {
   }
 }
 
-function clock(counterScore)  {
+function clock()  {
      if(counterTimer > 0) {
-        score.textContent = counterScore;
         timer.textContent = counterTimer;
         counterTimer--;
      } else if (counterTimer == 0) {
