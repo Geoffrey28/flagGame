@@ -6,6 +6,7 @@ var buttonGameOver = document.querySelector('#game-over button');
 var answers = document.querySelectorAll('.flag img');
 var answerName = document.getElementById('countriesName');
 var answer = {};
+var sortingArray = [];
 var lives = document.querySelectorAll('.lives img');
 var score = document.querySelector('.score strong');
 var timer = document.querySelector('.time span');
@@ -28,16 +29,31 @@ buttonHome.addEventListener('click', function() {
 buttonGameOver.addEventListener('click', function(){
   gameOver.classList.toggle('is-open');
   home.classList.toggle('is-open');
-  for (let i = 0; i < lives.length; i++) {
+  for (var i = 0; i < lives.length; i++) {
     lives[i].classList.remove('is-active');
   }
 });
+
+function sortingFlag(obj) {
+  //var objColors = obj.colors;
+  var sortingArray = [];
+  var noDouble = 0;
+  for (var b = 0; b < flags.length; b++) {
+      for (var a = 0; a < obj.colors.length; a++) {
+        if (obj.colors[a] == flags[b].colors[b] && !('flags[b]' in sortingArray)) {
+          sortingArray.push(flags[b]);
+          console.log(obj.colors[a], flags[b].colors[b]);
+        }
+      }
+      console.log(sortingArray);
+  }
+}
 
 function displaygame() {
 
     answer = flags[Math.floor(Math.random()*102)]; // Choisi un pays au hasard dans la liste
     answerName.textContent = answer.name;  // Fais apparaître le nom du pays à trouver
-
+    sortingFlag(answer);
 
     // Boucle qui ajoute les 4 drapeaux (choix de réponses)
     for (var i = 0; i < answers.length; i++) {
@@ -53,24 +69,10 @@ function displaygame() {
     answers[randomAnswer].src = "flags/" + answer.code + ".svg";
 }
 
-
-
-    // TRI COULEURS
-/*    for (var i = 0; i < answer.colors; i++) {
-      for (var a = 0; a < value.colors; a++) {
-        do {
-          var value = flags[Math.floor(Math.random()*flags.length+1)];
-        } while (answer[i].colors != value[i].colors || value.code == answer.code);
-      }
-    }
-    answers[i].src = "flags/" + value.code + ".svg"; */
-
 function runGame() {
     for (var i = 0; i < answers.length; i++) {
       answers[i].addEventListener('click', function() {
         var verify = this.src[46] + this.src[47];
-        console.log(this.src);
-        console.log(verify);
         if (verify === answer.code) {
           addScore();
           displaygame();
